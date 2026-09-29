@@ -3,7 +3,7 @@ const SUPABASE_URL = 'https://vkvrtvnztvjlpgzpufma.supabase.co/rest/v1/';
 const SUPABASE_ANON_KEY = 'sb_publishable_Czl44GBcZnqV2VXcbsMtUw_UvHnKFgk';
 
 // 2. Initialize the Supabase Client
-const supabase = createClient.supabaseClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const taskInput = document.getElementById('task-input');
 const addBtn = document.getElementById('add-btn');

@@ -1,24 +1,19 @@
-// 1. Configure your Supabase credentials
 const SUPABASE_URL = 'https://vkvrtvnztvjlpgzpufma.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_Czl44GBcZnqV2VXcbsMtUw_UvHnKFgk';
 
-// 2. Initialize the Supabase Client
 const supabaseClient  = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const taskInput = document.getElementById('task-input');
 const addBtn = document.getElementById('add-btn');
 const taskList = document.getElementById('task-list');
 
-// Load tasks from cloud database when page opens
 document.addEventListener('DOMContentLoaded', loadTasks);
 addBtn.addEventListener('click', addTask);
 
-// 3. Add a task to the Cloud Database
 async function addTask() {
     const taskText = taskInput.value.trim();
     if (taskText === '') return;
-
-    // Insert task into Supabase table
+    
     const { data, error } = await supabaseClient 
         .from('tasks')
         .insert([{ text: taskText }])
@@ -30,7 +25,6 @@ async function addTask() {
         return;
     }
 
-    // Render the task using the ID returned from Supabase
     if (data && data[0]) {
         createTaskElement(data[0].text, data[0].id);
     }
@@ -38,7 +32,6 @@ async function addTask() {
     taskInput.value = '';
 }
 
-// Helper to render task in DOM
 function createTaskElement(text, id) {
     const li = document.createElement('li');
     li.textContent = text;
@@ -47,16 +40,13 @@ function createTaskElement(text, id) {
     deleteBtn.textContent = 'X';
     deleteBtn.classList.add('delete-btn');
     
-    // Wire up deletion using the database row ID
     deleteBtn.addEventListener('click', () => deleteTask(id, li));
 
     li.appendChild(deleteBtn);
     taskList.appendChild(li);
 }
-
-// 4. Fetch all tasks from the Cloud Database
 async function loadTasks() {
-    taskList.innerHTML = ''; // Clear list
+    taskList.innerHTML = '';
     
     const { data: tasks, error } = await supabaseClient 
         .from('tasks')
@@ -71,7 +61,6 @@ async function loadTasks() {
     tasks.forEach(task => createTaskElement(task.text, task.id));
 }
 
-// 5. Delete a task from the Cloud Database
 async function deleteTask(id, element) {
     const { error } = await supabaseClient
         .from('tasks')
@@ -84,5 +73,5 @@ async function deleteTask(id, element) {
         return;
     }
 
-    element.remove(); // Remove from UI only if DB deletion succeeds
+    element.remove();
 }
